@@ -39,7 +39,7 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: 'http://github-roast.vercel.app/auth/github/callback',
+      callbackURL: 'https://github-roast.vercel.app/auth/github/callback',
     },
     (accessToken, refreshToken, profile, cb) => {
       return cb(null, profile)
