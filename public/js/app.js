@@ -8,7 +8,7 @@ async function getRoast() {
   try {
     const response = await fetch(`/roast/${username}`)
     const data = await response.json()
-    // console.log(data.text)
+    console.log(data.text)
     document.getElementById('roastOutput').textContent =
       data.text || 'No roast available.'
   } catch (error) {

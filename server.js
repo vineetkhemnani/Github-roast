@@ -10,8 +10,8 @@ const { GoogleGenerativeAI } = require('@google/generative-ai')
 const app = express()
 
 // Set EJS as the templating engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.json())
 app.use(express.static(__dirname + '/public/'))
@@ -63,11 +63,6 @@ app.use(passport.session())
 app.get('/', (req, res) => {
   if (!req.isAuthenticated()) {
     // if not authenticated go to login page
-    // res.sendFile(path.join(__dirname, 'public', 'login.html'), (err) => {
-    //   if (err) {
-    //     res.status(500).send('Error occurred while serving the file.')
-    //   }
-    // })
     res.render('login')
   } else {
     res.redirect('/home')
@@ -77,11 +72,6 @@ app.get('/', (req, res) => {
 // protected route to serve homepage after login
 app.get('/home', (req, res) => {
   if (req.isAuthenticated()) {
-    // res.sendFile(path.join(__dirname, 'public', 'home.html'), (err) => {
-    //   if (err) {
-    //     res.status(500).send('Error occurred while serving the file.')
-    //   }
-    // })
     res.render('home')
   } else {
     res.redirect('/')
