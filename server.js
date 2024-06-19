@@ -5,6 +5,7 @@ const passport = require('passport')
 const GitHubStrategy = require('passport-github').Strategy
 const session = require('express-session')
 const path = require('path')
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
 const app = express()
 app.use(express.json())
