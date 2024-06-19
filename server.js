@@ -6,17 +6,17 @@ const GitHubStrategy = require('passport-github').Strategy
 const session = require('express-session')
 const path = require('path')
 const { GoogleGenerativeAI } = require('@google/generative-ai')
+
 const app = express()
 app.use(express.json())
 app.use(express.static('public'))
 app.use(
   session({
-    secret: 'replace_this_with_a_secure_secret',
+    secret: process.env.SESSION_SECRET || 'replace_this_with_a_secure_secret',
     resave: false,
     saveUninitialized: true,
   })
 )
-
 
 passport.serializeUser((user, done) => {
   done(null, user)
@@ -82,8 +82,8 @@ app.get('/home', (req, res) => {
 })
 
 // gemini setup
-const gemini_api_key = process.env.GEMINI_API_KEY
-const genAI = new GoogleGenerativeAI(gemini_api_key)
+const geminiApiKey = process.env.GEMINI_API_KEY
+const genAI = new GoogleGenerativeAI(geminiApiKey)
 
 // endpoint to handle gemini api response
 app.get('/roast/:username', async (req, res) => {
@@ -95,11 +95,12 @@ app.get('/roast/:username', async (req, res) => {
     )
     const profileData = githubResponse.data
 
-    if (!profileData)
+    if (!profileData) {
       return res.status(404).json({ error: 'GitHub user not found' })
+    }
 
-    //  gemini api response
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' })
+    // gemini api response
+    const model = await genAI.getGenerativeModel({ model: 'gemini-1.5-pro' })
 
     const chat = model.startChat({
       history: [
@@ -121,14 +122,11 @@ app.get('/roast/:username', async (req, res) => {
       profileData.followers
     } followers.`
 
-    // const msg = 'roast google'
     const result = await chat.sendMessage(msg)
-    const response = await result.response
-    const text = response.text()
-    console.log(text)
+    const text = result.text
     res.json({ text })
   } catch (error) {
-    //  console.log('Error:', error)
+    console.error('Error:', error)
     res.status(500).json({ error: 'Failed to generate a response' })
   }
 })
