@@ -12,7 +12,7 @@ import { Strategy as GitHubStrategy } from 'passport-github'
 
 const app = express()
 
-app.use(express.static('public')) // Use express.static to serve static files
+app.use(express.static(path.join(__dirname, 'public')))// Use express.static to serve static files
 app.use(express.json()) // Use express.json to parse JSON bodies
 app.use(
   session({
