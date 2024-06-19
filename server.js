@@ -9,7 +9,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai')
 
 const app = express()
 app.use(express.json())
-app.use(express.static('public'))
+app.use(express.static(__dirname + '/public/'))
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'replace_this_with_a_secure_secret',
