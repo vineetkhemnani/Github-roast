@@ -1,30 +1,22 @@
-import dotenv from 'dotenv'
-dotenv.config()
-import express from 'express'
-import axios from 'axios'
-import path from 'path'
-import { fileURLToPath } from 'url'
-// const OpenAI = require('openai')
-import session from 'express-session'
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import passport from 'passport'
-import { Strategy as GitHubStrategy } from 'passport-github'
+require('dotenv').config()
+const express = require('express')
+const axios = require('axios')
+const passport = require('passport')
+const GitHubStrategy = require('passport-github').Strategy
+const session = require('express-session')
+const path = require('path')
 
 const app = express()
-
-app.use(express.static(path.join(__dirname, 'public')))// Use express.static to serve static files
-app.use(express.json()) // Use express.json to parse JSON bodies
+app.use(express.json())
+app.use(express.static('public'))
 app.use(
   session({
-    secret: 'your-secret-key-here',
+    secret: 'replace_this_with_a_secure_secret',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
   })
 )
 
-// Define __dirname for ES modules
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 passport.serializeUser((user, done) => {
   done(null, user)
@@ -134,7 +126,7 @@ app.get('/roast/:username', async (req, res) => {
     const response = await result.response
     const text = response.text()
     console.log(text)
-    res.json( {text} )
+    res.json({ text })
   } catch (error) {
     //  console.log('Error:', error)
     res.status(500).json({ error: 'Failed to generate a response' })
@@ -145,4 +137,3 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
-
