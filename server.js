@@ -119,9 +119,14 @@ app.get('/roast/:username', async (req, res) => {
       profileData.followers
     } followers.`
 
+    // const msg = 'roast google'
+
     const result = await chat.sendMessage(msg)
-    const text = result.text
+    const text = result.response.candidates[0].content.parts[0].text
+    console.log(text)
     res.json({ text })
+
+    
   } catch (error) {
     console.error('Error:', error)
     res.status(500).json({ error: 'Failed to generate a response' })
